@@ -1,4 +1,5 @@
 from bacteria import Bacteria
+import random
 
 class Colonia:
     def __init__(self, bacterias, ambiente):
@@ -60,3 +61,19 @@ class Colonia:
         # 3. División
         if bacteria.puede_dividirse():
             self.intentar_division(bacteria, i, j, nuevas_bacterias)
+    
+    def intentar_division(self, bacteria, i, j, nuevas_bacterias):
+        """Intenta dividir la bacteria si hay espacio"""
+        vecinos = self.ambiente.obtener_vecinos_libres(i, j)
+        if not vecinos:
+            return
+
+        # Seleccionar posición para la hija
+        nx, ny = random.choice(vecinos)
+
+        # Crear nueva bacteria
+        nuevo_id = self.calcular_proximo_id(nuevas_bacterias)
+        hija = bacteria.dividir(nuevo_id)
+
+        # Registrar nueva bacteria
+        nuevas_bacterias.append((hija, nx, ny))
