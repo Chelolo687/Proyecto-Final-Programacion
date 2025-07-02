@@ -7,7 +7,6 @@ gi.require_version("Gtk", "4.0")
 
 QUIT = False
 
-
 def quit_(window):
     global QUIT
     QUIT = True
@@ -47,4 +46,8 @@ class Ventana(Gtk.Window):
             for row in reader:
                 datos.append(row)
         return datos
-    
+    def actualizar_imagen(self):
+        img_path = f"imagenes_generadas/grilla_paso_{self.paso_actual}.png"
+        if not os.path.exists(img_path):
+            img_path = "imagenes_generadas/grilla_paso_0.png"
+        self.picture.set_file(Gio.File.new_for_path(img_path))
