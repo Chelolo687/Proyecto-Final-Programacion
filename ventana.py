@@ -46,8 +46,39 @@ class Ventana(Gtk.Window):
             for row in reader:
                 datos.append(row)
         return datos
+    
     def actualizar_imagen(self):
         img_path = f"imagenes_generadas/grilla_paso_{self.paso_actual}.png"
         if not os.path.exists(img_path):
             img_path = "imagenes_generadas/grilla_paso_0.png"
         self.picture.set_file(Gio.File.new_for_path(img_path))
+
+    def actualizar_info_csv(self):
+        if self.paso_actual < 0 or self.paso_actual > self.pasos_max:
+            self.label_info.set_label("No hay datos para este paso")
+            return
+        row = self.datos_csv[self.paso_actual]
+        texto = (
+            f"<b>Paso:</b> {row['paso']}\n"
+            f"<b>Bacterias activas:</b> {row['bacterias_activas']}\n"
+            f"<b>Bacterias muertas:</b> {row['bacterias_muertas']}\n"
+            f"<b>Bacterias resistentes:</b> {row['bacterias_resistentes']}"
+        )
+        self.label_info.set_label(texto)
+
+    def ir_anterior(self, button):
+        if self.paso_actual > 0:
+            self.paso_actual -= 1
+            self.actualizar_imagen()
+            self.actualizar_info_csv()
+
+    def ir_siguiente(self, button):
+        if self.paso_actual < self.pasos_max:
+            self.paso_actual += 1
+            self.actualizar_imagen()
+            self.actualizar_info_csv()
+
+
+   
+    
+    
