@@ -26,3 +26,15 @@ class Ambiente:
     def colocar_bacteria(self, x, y, bacteria):
         #Coloca una bacteria en la posición especificada
         self.grilla[x, y] = bacteria
+
+    def obtener_vecinos_libres(self, x, y):
+        #Obtiene posiciones vecinas libres
+        vecinos = []
+        direcciones = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+        for dx, dy in direcciones:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < self.tamaño_grilla and 0 <= ny < self.tamaño_grilla:
+                if self.grilla[nx, ny] is None:
+                    vecinos.append((nx, ny))
+        return vecinos
