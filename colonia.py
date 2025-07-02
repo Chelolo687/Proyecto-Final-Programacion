@@ -77,3 +77,10 @@ class Colonia:
 
         # Registrar nueva bacteria
         nuevas_bacterias.append((hija, nx, ny))
+
+    def agregar_nuevas_bacterias(self, nuevas_bacterias):
+        """Agrega nuevas bacterias al ambiente"""
+        for hija, nx, ny in nuevas_bacterias:
+            self.bacterias.append(hija)
+            self.ambiente.colocar_bacteria(nx, ny, hija)
+
