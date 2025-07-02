@@ -1,4 +1,6 @@
 import gi
+import os 
+import csv 
 from gi.repository import Gtk, GLib, Gio
 
 gi.require_version("Gtk", "4.0")
@@ -21,7 +23,7 @@ class Ventana(Gtk.Window):
         self.datos_csv = self.cargar_datos_csv("historial_colonia.csv")
         self.pasos_max = len(self.datos_csv) - 1
 
-    # Layout horizontal
+        # Layout horizontal
         main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         self.set_child(main_box)
 
@@ -34,3 +36,15 @@ class Ventana(Gtk.Window):
         # Columna derecha: Datos y botones
         side_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         main_box.append(side_box)
+
+    def cargar_datos_csv(self, archivo):
+        datos = []
+        if not os.path.exists(archivo):
+            print(f"No se encontró el archivo {archivo}")
+            return datos
+        with open(archivo, newline="") as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                datos.append(row)
+        return datos
+    
