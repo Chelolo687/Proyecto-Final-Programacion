@@ -11,7 +11,6 @@ def quit_(window):
     global QUIT
     QUIT = True
 
-
 class Ventana(Gtk.Window):
     def __init__(self):
         super().__init__(title="Simulador Placa Petri")
@@ -78,7 +77,11 @@ class Ventana(Gtk.Window):
             self.actualizar_imagen()
             self.actualizar_info_csv()
 
+    def lanzar_ventana():
+        Ventana()
+        loop = GLib.MainContext().default()
+        while not QUIT:
+            loop.iteration(True)
 
-   
     
     
