@@ -21,4 +21,16 @@ class Ventana(Gtk.Window):
         self.datos_csv = self.cargar_datos_csv("historial_colonia.csv")
         self.pasos_max = len(self.datos_csv) - 1
 
-       
+    # Layout horizontal
+        main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        self.set_child(main_box)
+
+        self.picture = Gtk.Picture()
+        self.picture.set_content_fit(Gtk.ContentFit.CONTAIN)  # Ajusta la imagen
+        self.picture.set_can_shrink(True)
+        main_box.append(self.picture)
+        self.actualizar_imagen()
+
+        # Columna derecha: Datos y botones
+        side_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        main_box.append(side_box)
