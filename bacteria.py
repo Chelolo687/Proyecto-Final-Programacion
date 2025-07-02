@@ -7,3 +7,13 @@ class Bacteria:
         self.energia = energia
         self.resistente = resistente
         self.estado = estado
+
+    def alimentar(self, nutrientes_disponibles):
+        """Consume nutrientes y aumenta la energía"""
+        if nutrientes_disponibles > 0:
+            consumido = min(nutrientes_disponibles, random.randint(15, 25))
+            self.energia += consumido
+            return consumido
+        else:
+            self.energia -= 10
+            return 0
