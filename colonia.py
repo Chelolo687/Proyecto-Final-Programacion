@@ -26,3 +26,17 @@ class Colonia:
             return 1
 
         return max_id + 1
+    
+    def paso(self):
+        #Ejecuta un paso de simulación
+        nuevas_bacterias = []
+        tamaño = self.ambiente.tamaño_grilla
+
+        for i in range(tamaño):
+            for j in range(tamaño):
+                bacteria = self.ambiente.grilla[i, j]
+                if bacteria and bacteria.estado == "activa":
+                    self.procesar_bacteria(bacteria, i, j, nuevas_bacterias)
+
+        # Agregar nuevas bacterias al final del ciclo
+        self.agregar_nuevas_bacterias(nuevas_bacterias)
