@@ -38,3 +38,15 @@ class Ambiente:
                 if self.grilla[nx, ny] is None:
                     vecinos.append((nx, ny))
         return vecinos
+    
+    def actualizar_nutrientes(self):
+        # Ejemplo: recarga o degrada nutrientes en cada celda
+        pass
+
+    def difundir_nutrientes(self):
+        # Ejemplo: difusión simple de nutrientes a celdas vecinas
+        pass
+
+    def aplicar_ambiente(self):
+        # Aplica efectos ambientales (antibióticos, estrés, etc.)
+        pass
