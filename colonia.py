@@ -40,3 +40,23 @@ class Colonia:
 
         # Agregar nuevas bacterias al final del ciclo
         self.agregar_nuevas_bacterias(nuevas_bacterias)
+
+    def procesar_bacteria(self, bacteria, i, j, nuevas_bacterias):
+        #Procesa todas las acciones de una bacteria
+        # 1. Alimentación
+        nutrientes = self.ambiente.obtener_nutrientes(i, j)
+        consumido = bacteria.alimentar(nutrientes)
+        if consumido > 0:
+            self.ambiente.reducir_nutrientes(i, j, consumido)
+
+        # 2. Verificar muerte
+        if bacteria.morir_por_inanicion():
+            return
+
+        concentracion = self.ambiente.obtener_concentracion_antibiotico(i, j)
+        if bacteria.morir_por_antibiotico(concentracion):
+            return
+
+        # 3. División
+        if bacteria.puede_dividirse():
+            self.intentar_division(bacteria, i, j, nuevas_bacterias)
