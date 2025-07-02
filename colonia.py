@@ -84,3 +84,19 @@ class Colonia:
             self.bacterias.append(hija)
             self.ambiente.colocar_bacteria(nx, ny, hija)
 
+    def reporte_estado(self):
+        activas = 0
+        muertas = 0
+        resistentes = 0
+        for b in self.bacterias:
+            if b.estado == "activa":
+                activas += 1
+                if b.resistente:
+                    resistentes += 1
+            elif b.estado == "muerta":
+                muertas += 1
+        return {
+            "bacterias_activas": activas,
+            "bacterias_muertas": muertas,
+            "bacterias_resistentes": resistentes,
+        }
