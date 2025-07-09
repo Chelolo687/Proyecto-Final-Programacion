@@ -43,8 +43,16 @@ class Bacteria:
         self.energia -= energia_hija
 
         # Determinar resistencia de la hija
-        resistente_hija = self.resistente and (random.random() < 0.95)
-        if random.random() < 0.15:  # Mutación
+        resistente_hija = self.resistente
+        
+        # Herencia de resistencia con pequeña probabilidad de pérdida
+        if self.resistente and random.random() < 0.05:
+            resistente_hija = False  # Pérdida de resistencia muy rara
+        elif self.resistente and random.random() < 0.95:
+            resistente_hija = True  # Herencia normal
+        
+        # Mutación espontánea a resistencia
+        if not resistente_hija and random.random() < 0.12:
             resistente_hija = True
 
         return Bacteria(
