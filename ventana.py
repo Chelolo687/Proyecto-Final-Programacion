@@ -40,7 +40,7 @@ class Ventana(Gtk.Window):
         if not os.path.exists(archivo):
             print(f"No se encontró el archivo {archivo}")
             return datos
-        with open(archivo, newline="") as csvfile:
+        with open(archivo, newline="", encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 datos.append(row)
@@ -82,6 +82,3 @@ class Ventana(Gtk.Window):
         loop = GLib.MainContext().default()
         while not QUIT:
             loop.iteration(True)
-
-    
-    
