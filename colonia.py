@@ -1,7 +1,7 @@
 from bacteria import Bacteria
 import random
 
-class olonia:
+class Colonia:
     def __init__(self, bacterias, ambiente):
         self.bacterias = bacterias
         self.ambiente = ambiente
