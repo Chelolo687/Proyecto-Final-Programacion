@@ -34,3 +34,17 @@ class Simulador:
         df = pd.DataFrame(self.historia)
         df.to_csv(nombre_archivo, index=False)
         print(f"Historial exportado a {nombre_archivo}")
+
+    def exportar_eventos_txt(self, nombre_archivo="eventos_simulacion.txt"):
+        with open(nombre_archivo, 'w', encoding='utf-8') as f:
+            for entrada in self.historia:
+                paso = entrada["paso"]
+                eventos = entrada["eventos"]
+                f.write(f"Paso {paso}:\n")
+                if eventos:
+                    for evento in eventos:
+                        f.write(f"  - {evento}\n")
+                else:
+                    f.write("  - No ocurrieron eventos\n")
+                f.write("\n")
+        print(f"Eventos exportados a {nombre_archivo}")
