@@ -1,7 +1,7 @@
 from bacteria import Bacteria
 import random
 
-class Colonia:
+class olonia:
     def __init__(self, bacterias, ambiente):
         self.bacterias = bacterias
         self.ambiente = ambiente
@@ -27,7 +27,7 @@ class Colonia:
             return 1
 
         return max_id + 1
-    
+
     def paso(self):
         #Ejecuta un paso de simulación
         nuevas_bacterias = []
@@ -61,7 +61,7 @@ class Colonia:
         # 3. División
         if bacteria.puede_dividirse():
             self.intentar_division(bacteria, i, j, nuevas_bacterias)
-    
+
     def intentar_division(self, bacteria, i, j, nuevas_bacterias):
         """Intenta dividir la bacteria si hay espacio"""
         vecinos = self.ambiente.obtener_vecinos_libres(i, j)
@@ -85,18 +85,47 @@ class Colonia:
             self.ambiente.colocar_bacteria(nx, ny, hija)
 
     def reporte_estado(self):
+        """Cuenta solo las bacterias que están actualmente en la grilla (visibles)"""
         activas = 0
         muertas = 0
         resistentes = 0
-        for b in self.bacterias:
-            if b.estado == "activa":
-                activas += 1
-                if b.resistente:
-                    resistentes += 1
-            elif b.estado == "muerta":
-                muertas += 1
+        ya_contadas = set()  # Para evitar contar la misma bacteria dos veces
+        tamaño = self.ambiente.tamaño_grilla
+        
+        for i in range(tamaño):
+            for j in range(tamaño):
+                bacteria = self.ambiente.grilla[i, j]
+                if bacteria is None or bacteria in ya_contadas:
+                    continue
+                ya_contadas.add(bacteria)
+                
+                if bacteria.estado == "activa":
+                    activas += 1
+                    if bacteria.resistente:
+                        resistentes += 1
+                elif bacteria.estado == "muerta":
+                    muertas += 1
+                    
         return {
             "bacterias_activas": activas,
             "bacterias_muertas": muertas,
             "bacterias_resistentes": resistentes,
+        }
+
+    def reporte_estado_historico(self):
+        """Cuenta todas las bacterias que han existido (incluyendo las ya removidas de la grilla)"""
+        activas = 0
+        muertas = 0
+        resistentes = 0
+        for bacteria in self.bacterias:
+            if bacteria.estado == "activa":
+                activas += 1
+                if bacteria.resistente:
+                    resistentes += 1
+            elif bacteria.estado == "muerta":
+                muertas += 1
+        return {
+            "bacterias_activas_historico": activas,
+            "bacterias_muertas_historico": muertas,
+            "bacterias_resistentes_historico": resistentes,
         }
