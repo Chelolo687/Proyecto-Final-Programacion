@@ -7,11 +7,12 @@ class Simulador:
         self.colonia = colonia
         self.historia = []  # Guarda el estado de cada paso
 
-    def run(self, pasos, guardar_csv=True, guardar_imagenes=True):
+    def run(self, pasos, guardar_csv=True, guardar_imagenes=True, guardar_eventos_txt=True):
         for paso in range(pasos):
-            self.colonia.paso()
+            eventos = self.colonia.paso()
             estado = self.colonia.reporte_estado()
             estado["paso"] = paso
+            estado["eventos"] = eventos
             self.historia.append(estado)
             print(f"Paso {paso}: {estado}")
 
@@ -25,6 +26,9 @@ class Simulador:
 
         if guardar_csv:
             self.exportar_historia_csv()
+            
+        if guardar_eventos_txt:
+            self.exportar_eventos_txt()
 
     def exportar_historia_csv(self, nombre_archivo="historial_colonia.csv"):
         df = pd.DataFrame(self.historia)
