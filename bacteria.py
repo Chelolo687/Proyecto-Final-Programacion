@@ -17,10 +17,6 @@ class Bacteria:
         else:
             self.energia -= 10
             return 0
-        
-    def puede_dividirse(self):
-        """Determina si puede dividirse"""
-        return self.estado == "activa" and self.energia >= 80
 
     def morir_por_inanicion(self):
         """Verifica si debe morir por inanición"""
@@ -36,6 +32,10 @@ class Bacteria:
                 self.morir()
                 return True
         return False
+    
+    def puede_dividirse(self):
+        """Determina si puede dividirse"""
+        return self.estado == "activa" and self.energia >= 80
     
     def dividir(self, nuevo_id, posicion=None):
         """Realiza el proceso de división celular"""
