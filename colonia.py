@@ -134,6 +134,24 @@ class Colonia:
             self.bacterias.append(hija)
             self.ambiente.colocar_bacteria(nx, ny, hija)
 
+    def eventos_ambientales(self, total_bacterias):
+        """Genera eventos ambientales poco frecuentes"""
+        eventos = []
+        # Eventos de nutrientes
+        if random.random() < 0.18:
+            eventos.append("Los nutrientes se están agotando en algunas zonas")
+        
+        # Eventos de competencia
+        if total_bacterias > 15 and random.random() < 0.14:
+            eventos.append("Aumenta la competencia por recursos")
+            
+        # Eventos de resistencia
+        resistentes = sum(1 for b in self.bacterias if b.resistente and b.estado == "activa")
+        if resistentes > 3 and random.random() < 0.16:
+            eventos.append(f"Se detectaron {resistentes} bacterias resistentes en la colonia")
+            
+        return eventos        
+
     def reporte_estado(self):
         """Cuenta solo las bacterias que están actualmente en la grilla (visibles)"""
         activas = 0
