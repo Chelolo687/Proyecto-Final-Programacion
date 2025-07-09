@@ -55,25 +55,55 @@ class Colonia:
         return eventos
 
     def procesar_bacteria(self, bacteria, i, j, nuevas_bacterias):
-        #Procesa todas las acciones de una bacteria
+        """Procesa todas las acciones de una bacteria y retorna los eventos"""
+        eventos = []
+        
         # 1. Alimentación
         nutrientes = self.ambiente.obtener_nutrientes(i, j)
         consumido = bacteria.alimentar(nutrientes)
         if consumido > 0:
             self.ambiente.reducir_nutrientes(i, j, consumido)
+            # Reportar consumo alto ocasionalmente
+            if consumido > 22 and random.random() < 0.08:
+                eventos.append(f"Bacteria {bacteria.id} consumió {consumido} unidades de nutrientes")
+        else:
+            # Reportar escasez de nutrientes ocasionalmente
+            if random.random() < 0.12:
+                eventos.append(f"Bacteria {bacteria.id} no encontró nutrientes disponibles")
 
-        # 2. Verificar muerte
+        # 2. Verificar muerte por inanición
         if bacteria.morir_por_inanicion():
-            return
+            eventos.append(f"Bacteria {bacteria.id} murió por inanición")
+            return eventos
 
+        # 3. Verificar muerte por antibiótico
         concentracion = self.ambiente.obtener_concentracion_antibiotico(i, j)
-        if bacteria.morir_por_antibiotico(concentracion):
-            return
+        if concentracion > 0:
+            if bacteria.morir_por_antibiotico(concentracion):
+                if bacteria.resistente:
+                    eventos.append(f"Bacteria {bacteria.id} (resistente) murió por antibiótico")
+                else:
+                    eventos.append(f"Bacteria {bacteria.id} murió por antibiótico")
+                return eventos
+            else:
+                # Bacteria sobrevivió al antibiótico
+                if not bacteria.resistente and random.random() < 0.15:
+                    eventos.append(f"Bacteria {bacteria.id} sobrevivió al antibiótico")
 
-        # 3. División
+        # 4. División
         if bacteria.puede_dividirse():
-            self.intentar_division(bacteria, i, j, nuevas_bacterias)
-
+            evento_division = self.intentar_division(bacteria, i, j, nuevas_bacterias)
+            if evento_division:
+                eventos.append(evento_division)
+        else:
+            # Reportar bacterias con alta energía que no pueden dividirse
+            if bacteria.energia > 70 and random.random() < 0.06:
+                vecinos = self.ambiente.obtener_vecinos_libres(i, j)
+                if not vecinos:
+                    eventos.append(f"Bacteria {bacteria.id} no puede dividirse por falta de espacio")
+                
+        return eventos
+    
     def intentar_division(self, bacteria, i, j, nuevas_bacterias):
         """Intenta dividir la bacteria si hay espacio"""
         vecinos = self.ambiente.obtener_vecinos_libres(i, j)
