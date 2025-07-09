@@ -46,6 +46,34 @@ class Ventana(Gtk.Window):
                 datos.append(row)
         return datos
     
+    def cargar_eventos_txt(self, archivo):
+        eventos_por_paso = {}
+        if not os.path.exists(archivo):
+            print(f"No se encontró el archivo {archivo}")
+            return eventos_por_paso
+        
+        with open(archivo, 'r', encoding='utf-8') as f:
+            lineas = f.readlines()
+        
+        paso_actual = None
+        eventos_paso = []
+        
+        for linea in lineas:
+            linea = linea.strip()
+            if linea.startswith("Paso ") and linea.endswith(":"):
+                if paso_actual is not None:
+                    eventos_por_paso[paso_actual] = eventos_paso
+                paso_actual = int(linea.split()[1][:-1])
+                eventos_paso = []
+            elif linea.startswith("  - "):
+                eventos_paso.append(linea[4:])
+        
+        # Agregar último paso
+        if paso_actual is not None:
+            eventos_por_paso[paso_actual] = eventos_paso
+            
+        return eventos_por_paso
+    
     def actualizar_imagen(self):
         img_path = f"imagenes_generadas/grilla_paso_{self.paso_actual}.png"
         if not os.path.exists(img_path):
