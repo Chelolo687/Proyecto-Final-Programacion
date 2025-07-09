@@ -8,7 +8,23 @@ class Simulador:
         self.historia = []  # Guarda el estado de cada paso
 
     def run(self, pasos, guardar_csv=True, guardar_imagenes=True, guardar_eventos_txt=True):
-        for paso in range(pasos):
+        # PASO 0: Solo visualización del estado inicial (sin eventos)
+        estado_inicial = self.colonia.reporte_estado()
+        estado_inicial["paso"] = 0
+        estado_inicial["eventos"] = []  # No hay eventos en el paso inicial
+        self.historia.append(estado_inicial)
+        print(f"Paso 0 (Estado inicial): {estado_inicial}")
+
+        if guardar_imagenes:
+            nombre_img = f"grilla_paso_0.png"
+            graficar_grilla_bacteriana(
+                self.colonia.ambiente,
+                nombre_imagen=nombre_img,
+                titulo="Paso 0 - Estado inicial",
+            )
+
+        # PASOS 1 en adelante: Procesamiento de eventos
+        for paso in range(1, pasos + 1):
             eventos = self.colonia.paso()
             estado = self.colonia.reporte_estado()
             estado["paso"] = paso
@@ -45,6 +61,9 @@ class Simulador:
                     for evento in eventos:
                         f.write(f"  - {evento}\n")
                 else:
-                    f.write("  - No ocurrieron eventos\n")
+                    if paso == 0:
+                        f.write("  - Estado inicial (sin eventos)\n")
+                    else:
+                        f.write("  - No ocurrieron eventos\n")
                 f.write("\n")
         print(f"Eventos exportados a {nombre_archivo}")
