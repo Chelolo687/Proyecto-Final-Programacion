@@ -10,8 +10,27 @@ class Ambiente:
         if factor_ambiental is not None:
             self.factor_ambiental = factor_ambiental
         else:
+            # Crear algunas zonas con antibiótico de forma aleatoria
             self.factor_ambiental = np.zeros((tamaño_grilla, tamaño_grilla))
+            self.generar_zonas_antibiotico()
         
+    def generar_zonas_antibiotico(self):
+        """Genera algunas zonas con concentración de antibiótico"""
+        # Crear 2-3 zonas pequeñas con antibiótico
+        num_zonas = random.randint(2, 4)
+        for _ in range(num_zonas):
+            centro_x = random.randint(1, self.tamaño_grilla - 2)
+            centro_y = random.randint(1, self.tamaño_grilla - 2)
+            
+            # Crear una zona pequeña de 1-2 celdas de radio
+            for dx in range(-1, 2):
+                for dy in range(-1, 2):
+                    x, y = centro_x + dx, centro_y + dy
+                    if 0 <= x < self.tamaño_grilla and 0 <= y < self.tamaño_grilla:
+                        if random.random() < 0.6:  # No todas las celdas vecinas tienen antibiótico
+                            self.factor_ambiental[x, y] = random.uniform(0.3, 0.8)
+
+
     def obtener_concentracion_antibiotico(self, x, y):
         #Obtiene la concentración de antibiótico en una posición
         return self.factor_ambiental[x, y]
@@ -21,8 +40,8 @@ class Ambiente:
         return self.nutrientes[x, y]
 
     def reducir_nutrientes(self, x, y, cantidad):
-        #Reduce los nutrientes en una posición
-        self.nutrientes[x, y] -= cantidad
+        """Reduce los nutrientes en una posición"""
+        self.nutrientes[x, y] = max(0, self.nutrientes[x, y] - cantidad)
 
     def colocar_bacteria(self, x, y, bacteria):
         #Coloca una bacteria en la posición especificada
