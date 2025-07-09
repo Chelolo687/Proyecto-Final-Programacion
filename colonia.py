@@ -105,10 +105,10 @@ class Colonia:
         return eventos
     
     def intentar_division(self, bacteria, i, j, nuevas_bacterias):
-        """Intenta dividir la bacteria si hay espacio"""
+        """Intenta dividir la bacteria si hay espacio y retorna el evento"""
         vecinos = self.ambiente.obtener_vecinos_libres(i, j)
         if not vecinos:
-            return
+            return None
 
         # Seleccionar posición para la hija
         nx, ny = random.choice(vecinos)
@@ -119,6 +119,14 @@ class Colonia:
 
         # Registrar nueva bacteria
         nuevas_bacterias.append((hija, nx, ny))
+        
+        # Generar mensaje del evento
+        if hija.resistente and not bacteria.resistente:
+            return f"Bacteria {bacteria.id} se dividió → hija {hija.id} mutó y adquirió resistencia"
+        elif hija.resistente and bacteria.resistente:
+            return f"Bacteria {bacteria.id} (resistente) se dividió → hija {hija.id} heredó resistencia"
+        else:
+            return f"Bacteria {bacteria.id} se dividió → hija {hija.id}"
 
     def agregar_nuevas_bacterias(self, nuevas_bacterias):
         """Agrega nuevas bacterias al ambiente"""
