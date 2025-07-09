@@ -48,9 +48,9 @@ class Ambiente:
                     self.nutrientes[i, j] += random.randint(5, 15)
 
     def difundir_nutrientes(self):
-        # Ejemplo: difusión simple de nutrientes a celdas vecinas
+        """Difusión simple de nutrientes a celdas vecinas"""
         pass
 
     def aplicar_ambiente(self):
-        # Aplica efectos ambientales (antibióticos, estrés, etc.)
+        """Aplica efectos ambientales (antibióticos, estrés, etc.)"""
         pass
