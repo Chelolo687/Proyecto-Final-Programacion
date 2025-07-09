@@ -93,6 +93,32 @@ class Ventana(Gtk.Window):
         )
         self.label_info.set_label(texto)
 
+    def actualizar_eventos(self):
+        buffer = self.text_eventos.get_buffer()
+        
+        # Obtener eventos del CSV si están disponibles
+        if self.paso_actual <= len(self.datos_csv) - 1:
+            row = self.datos_csv[self.paso_actual]
+            if 'eventos' in row and row['eventos']:
+                try:
+                    # Los eventos están guardados como string de lista en el CSV
+                    eventos_str = row['eventos']
+                    # Convertir string de lista a lista real
+                    import ast
+                    eventos = ast.literal_eval(eventos_str)
+                    if eventos:
+                        texto_eventos = "\n".join([f"• {evento}" for evento in eventos])
+                    else:
+                        texto_eventos = "No ocurrieron eventos significativos"
+                except:
+                    texto_eventos = "Error al cargar eventos"
+            else:
+                texto_eventos = "No ocurrieron eventos significativos"
+        else:
+            texto_eventos = "No hay información de eventos para este paso"
+        
+        buffer.set_text(texto_eventos)
+        
     def ir_anterior(self, button):
         if self.paso_actual > 0:
             self.paso_actual -= 1
