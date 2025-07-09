@@ -1,4 +1,5 @@
 import numpy as np
+import random   
 
 class Ambiente:
     def __init__(self, tamaño_grilla, nutrientes_por_celda, factor_ambiental=None):
@@ -40,8 +41,11 @@ class Ambiente:
         return vecinos
     
     def actualizar_nutrientes(self):
-        # Ejemplo: recarga o degrada nutrientes en cada celda
-        pass
+        """Recarga lentamente los nutrientes en algunas celdas"""
+        for i in range(self.tamaño_grilla):
+            for j in range(self.tamaño_grilla):
+                if self.nutrientes[i, j] < 50 and random.random() < 0.1:
+                    self.nutrientes[i, j] += random.randint(5, 15)
 
     def difundir_nutrientes(self):
         # Ejemplo: difusión simple de nutrientes a celdas vecinas
