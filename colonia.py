@@ -29,18 +29,30 @@ class Colonia:
         return max_id + 1
 
     def paso(self):
-        #Ejecuta un paso de simulación
+        """Ejecuta un paso de simulación y retorna los eventos ocurridos"""
         nuevas_bacterias = []
+        eventos = []
         tamaño = self.ambiente.tamaño_grilla
+        
+        # Contador para eventos de baja frecuencia
+        total_bacterias_procesadas = 0
 
         for i in range(tamaño):
             for j in range(tamaño):
                 bacteria = self.ambiente.grilla[i, j]
                 if bacteria and bacteria.estado == "activa":
-                    self.procesar_bacteria(bacteria, i, j, nuevas_bacterias)
+                    total_bacterias_procesadas += 1
+                    eventos_bacteria = self.procesar_bacteria(bacteria, i, j, nuevas_bacterias)
+                    eventos.extend(eventos_bacteria)
 
         # Agregar nuevas bacterias al final del ciclo
         self.agregar_nuevas_bacterias(nuevas_bacterias)
+        
+        # Eventos adicionales poco frecuentes
+        if total_bacterias_procesadas > 0:
+            eventos.extend(self.eventos_ambientales(total_bacterias_procesadas))
+        
+        return eventos
 
     def procesar_bacteria(self, bacteria, i, j, nuevas_bacterias):
         #Procesa todas las acciones de una bacteria
